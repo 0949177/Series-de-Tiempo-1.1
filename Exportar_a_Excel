@@ -1,0 +1,19 @@
+#Cómo exportar a Excel
+library(foreign)
+x<-read.dbf("C:\\Users\\SALA-E8\\Desktop\\SDEMT215.dbf",as.is = FALSE)
+ENT<-subset(x,(ENT=="15" | ENT=="01")) #Se crea el Subset para EDOMEX y Aguascalientes
+View(ENT)
+S<-table(x$SEX)#Se crea la tabla segun la distribucion por sexo de todas las entidades
+PEA<-table(x$CLASE1)#Se crea la tabla segun la PEA de todas las entidades
+P<-table(x$CLASE2)#Se crea la tabla segun la Pob ocu por sexo de todas las entidades
+install.packages("XLConnect")
+require(XLConnect)
+library(XLConnect)
+wb<-loadWorkbook("C:/Users/SALA-E8/Desktop/ejemplo1.xls",create = TRUE) #Se creea el libro de Excel
+createSheet(wb,name="SEXO") #Se crea la hoja de Excel
+writeWorksheet(wb,S,"SEXO",startRow = 1,startCol =2,header = TRUE )#se asignan los datos
+createSheet(wb,name="COND. DE OCUPACION")
+writeWorksheet(wb,P,"COND. DE OCUPACION",startRow = 1,startCol =2,header = TRUE )
+createSheet(wb,name="POBLACION ACTIVA")
+writeWorksheet(wb,PEA,"POBLACION ACTIVA",startRow = 1,startCol =2,header = TRUE )
+saveWorkbook(wb)
